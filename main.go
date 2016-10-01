@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 
+	"github.com/atotto/clipboard"
 	"github.com/peterhellberg/giphy"
 )
 
@@ -36,5 +37,6 @@ func main() {
 
 	exec.Command(openCommand(), lgtmImageUrl).Start()
 	fmt.Println(lgtmMarkdownText)
+	clipboard.WriteAll(lgtmMarkdownText)
 	os.Exit(0)
 }

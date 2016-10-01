@@ -21,7 +21,7 @@ func lgtmMarkdown(url string) string {
 }
 
 func main() {
-	var tag = flag.String("tag", "cat", "Search query term or phrase. Default is 'cat'.")
+	var tag = flag.String("tag", "cat", "Search query term or phrase.")
 	flag.Parse()
 
 	client := giphy.DefaultClient

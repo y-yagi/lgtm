@@ -11,10 +11,6 @@ import (
 	"github.com/peterhellberg/giphy"
 )
 
-const LGTM_URL = "http://lgtm.herokuapp.com/"
-const MAX_RETRY_COUNT = 3
-const MAX_CONTENT_LENGTH = 2097152
-
 func openCommand() string {
 	return "gnome-open"
 }
@@ -24,7 +20,11 @@ func lgtmMarkdown(url string) string {
 }
 
 func main() {
-	var lgtmImageUrl string
+	var lgtmURL = "http://lgtm.herokuapp.com/"
+	var maxRetryCount = 3
+	var maxContentLength = 2097152
+
+	var lgtmImageURL string
 	var random giphy.Random
 	var gif giphy.GIF
 	var err error
@@ -32,7 +32,7 @@ func main() {
 	var tag = flag.String("tag", "cat", "Search query term or phrase.")
 	flag.Parse()
 
-	for i := 0; i < MAX_RETRY_COUNT; i++ {
+	for i := 0; i < maxRetryCount; i++ {
 		client := giphy.DefaultClient
 		random, err = client.Random([]string{*tag})
 		if err != nil {
@@ -47,20 +47,20 @@ func main() {
 		}
 
 		fileSize, _ := strconv.Atoi(gif.Data.Images.Original.Size)
-		if fileSize < MAX_CONTENT_LENGTH {
-			lgtmImageUrl = LGTM_URL + random.Data.ImageURL
+		if fileSize < maxContentLength {
+			lgtmImageURL = lgtmURL + random.Data.ImageURL
 			break
 		}
 	}
 
-	if len(lgtmImageUrl) == 0 {
+	if len(lgtmImageURL) == 0 {
 		fmt.Printf("File generation fails. Please run the command again.\n")
 		os.Exit(1)
 	}
 
-	exec.Command(openCommand(), lgtmImageUrl).Start()
+	exec.Command(openCommand(), lgtmImageURL).Start()
 
-	lgtmMarkdownText := lgtmMarkdown(lgtmImageUrl)
+	lgtmMarkdownText := lgtmMarkdown(lgtmImageURL)
 	fmt.Println(lgtmMarkdownText)
 	clipboard.WriteAll(lgtmMarkdownText)
 	os.Exit(0)

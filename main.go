@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"runtime"
 	"strconv"
 
 	"github.com/atotto/clipboard"
@@ -12,7 +13,16 @@ import (
 )
 
 func openCommand() string {
-	return "gnome-open"
+	command := ""
+	os := runtime.GOOS
+
+	if os == "linux" {
+		command = "gnome-open"
+	} else if os == "darwin" {
+		command = "open"
+	}
+
+	return command
 }
 
 func lgtmMarkdown(url string) string {
@@ -58,7 +68,10 @@ func main() {
 		os.Exit(1)
 	}
 
-	exec.Command(openCommand(), lgtmImageURL).Start()
+	openCommand := openCommand()
+	if len(openCommand) != 0 {
+		exec.Command(openCommand, lgtmImageURL).Start()
+	}
 
 	lgtmMarkdownText := lgtmMarkdown(lgtmImageURL)
 	fmt.Println(lgtmMarkdownText)

@@ -3,10 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
-	"net/http"
 	"os"
 	"os/exec"
+	"strconv"
 
 	"github.com/atotto/clipboard"
 	"github.com/peterhellberg/giphy"
@@ -14,6 +13,7 @@ import (
 
 const LGTM_URL = "http://lgtm.herokuapp.com/"
 const MAX_RETRY_COUNT = 3
+const MAX_CONTENT_LENGTH = 2097152
 
 func openCommand() string {
 	return "gnome-open"
@@ -25,60 +25,40 @@ func lgtmMarkdown(url string) string {
 
 func main() {
 	var lgtmImageUrl string
-	var lgtmFile string
+	var random giphy.Random
+	var gif giphy.GIF
+	var err error
 
 	var tag = flag.String("tag", "cat", "Search query term or phrase.")
 	flag.Parse()
 
-	dir, err := ioutil.TempDir("", "lgtm")
-	if err != nil {
-		fmt.Printf("error: %s\n", err)
-		os.Exit(1)
-	}
-
 	for i := 0; i < MAX_RETRY_COUNT; i++ {
 		client := giphy.DefaultClient
-		random, err := client.Random([]string{*tag})
-
+		random, err = client.Random([]string{*tag})
 		if err != nil {
 			fmt.Printf("error: %s\n", err)
 			os.Exit(1)
 		}
 
-		lgtmImageUrl = LGTM_URL + random.Data.ImageURL
-		response, err := http.Get(lgtmImageUrl)
+		gif, err = client.GIF(random.Data.ID)
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		if response.StatusCode != 200 {
-			continue
-		}
-
-		body, err := ioutil.ReadAll(response.Body)
-		if err != nil {
-			fmt.Println(err)
+			fmt.Printf("error: %s\n", err)
 			os.Exit(1)
 		}
 
-		lgtmFile = dir + "/" + random.Data.ID + ".gif"
-		file, err := os.OpenFile(lgtmFile, os.O_CREATE|os.O_WRONLY, 0666)
-		if err != nil {
-			fmt.Println(err)
+		fileSize, _ := strconv.Atoi(gif.Data.Images.Original.Size)
+		if fileSize < MAX_CONTENT_LENGTH {
+			lgtmImageUrl = LGTM_URL + random.Data.ImageURL
+			break
 		}
-
-		defer func() {
-			file.Close()
-		}()
-
-		file.Write(body)
 	}
 
-	if len(lgtmFile) == 0 {
+	if len(lgtmImageUrl) == 0 {
 		fmt.Printf("File generation fails. Please run the command again.\n")
+		os.Exit(1)
 	}
 
-	exec.Command(openCommand(), lgtmFile).Start()
+	exec.Command(openCommand(), lgtmImageUrl).Start()
 
 	lgtmMarkdownText := lgtmMarkdown(lgtmImageUrl)
 	fmt.Println(lgtmMarkdownText)

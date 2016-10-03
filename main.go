@@ -29,18 +29,29 @@ func lgtmMarkdown(url string) string {
 	return "![LGTM](" + url + ")"
 }
 
+var version = "0.0.1"
+
 func main() {
 	var lgtmURL = "http://lgtm.herokuapp.com/"
 	var maxRetryCount = 3
 	var maxContentLength = 2097152
 
+	var showVersion bool
 	var lgtmImageURL string
 	var random giphy.Random
 	var gif giphy.GIF
 	var err error
 
 	var tag = flag.String("tag", "cat", "Search query term or phrase.")
+	flag.BoolVar(&showVersion, "v", false, "show version")
+	flag.BoolVar(&showVersion, "version", false, "show version")
 	flag.Parse()
+
+	if showVersion {
+		fmt.Println("version:", version)
+		os.Exit(0)
+		return
+	}
 
 	for i := 0; i < maxRetryCount; i++ {
 		client := giphy.DefaultClient

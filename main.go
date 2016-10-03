@@ -37,12 +37,13 @@ func main() {
 	var maxContentLength = 2097152
 
 	var showVersion bool
+	var tag string
 	var lgtmImageURL string
 	var random giphy.Random
 	var gif giphy.GIF
 	var err error
 
-	var tag = flag.String("tag", "cat", "Search query term or phrase.")
+	flag.StringVar(&tag, "tag", "cat", "Search query term or phrase.")
 	flag.BoolVar(&showVersion, "v", false, "show version")
 	flag.BoolVar(&showVersion, "version", false, "show version")
 	flag.Parse()
@@ -55,7 +56,7 @@ func main() {
 
 	for i := 0; i < maxRetryCount; i++ {
 		client := giphy.DefaultClient
-		random, err = client.Random([]string{*tag})
+		random, err = client.Random([]string{tag})
 		if err != nil {
 			fmt.Printf("error: %s\n", err)
 			os.Exit(1)

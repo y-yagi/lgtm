@@ -3,7 +3,7 @@
 ## Installation
 
 ```sh
-$ go get y-yagi/lgtm
+$ go get github.com/y-yagi/lgtm
 ```
 
 ## Usage

@@ -29,7 +29,7 @@ func lgtmMarkdown(url string) string {
 	return "![LGTM](" + url + ")"
 }
 
-var version = "0.0.1"
+const version = "0.0.1"
 
 func main() {
 	var lgtmURL = "http://lgtm.herokuapp.com/"

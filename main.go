@@ -33,7 +33,7 @@ var version = "0.0.1"
 
 func main() {
 	var lgtmURL = "http://lgtm.herokuapp.com/"
-	var maxRetryCount = 3
+	var maxRetryCount = 5
 	var maxContentLength = 2097152
 
 	var showVersion bool

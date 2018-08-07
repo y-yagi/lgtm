@@ -1,0 +1,43 @@
+version: 2
+
+test: &test
+  steps:
+    - checkout
+    - run:
+        name : Run dep
+        command: |
+          curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+          dep ensure
+    - run:
+        name: Run vet
+        command: go vet
+    - run:
+        name: Run lint
+        command: |
+          go get -u golang.org/x/lint/golint
+          golint -set_exit_status
+    - run:
+        name: Run megacheck
+        command: |
+          go get honnef.co/go/tools/cmd/megacheck
+          megacheck
+
+jobs:
+  go-1.9-test:
+    docker:
+      - image: circleci/golang:1.9
+    working_directory: /go/src/github.com/y-yagi/lgtm
+    <<: *test
+
+  go-1.10-test:
+    docker:
+      - image: circleci/golang:1.10
+    working_directory: /go/src/github.com/y-yagi/lgtm
+    <<: *test
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - go-1.9-test
+      - go-1.10-test

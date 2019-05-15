@@ -17,10 +17,10 @@ test: &test
           go get -u golang.org/x/lint/golint
           golint -set_exit_status
     - run:
-        name: Run megacheck
+        name: Run staticcheck
         command: |
-          go get honnef.co/go/tools/cmd/megacheck
-          megacheck
+          go get -u honnef.co/go/tools/cmd/staticcheck
+          staticcheck
 
 jobs:
   go-1.12-test:

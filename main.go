@@ -68,9 +68,10 @@ func main() {
 			os.Exit(1)
 		}
 
-		fileSize, _ := strconv.Atoi(gif.Data.Images.Original.Size)
+		fileSize, _ := strconv.Atoi(gif.Data.Images.Downsized.Size)
 		if fileSize < maxContentLength {
-			lgtmImageURL = lgtmURL + gif.Data.Images.Original.URL
+			fmt.Printf("%+v\n", gif.Data.Images)
+			lgtmImageURL = lgtmURL + gif.Data.Images.Downsized.URL
 			break
 		}
 	}

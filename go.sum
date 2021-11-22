@@ -1,0 +1,4 @@
+github.com/atotto/clipboard v0.1.4 h1:EH0zSVneZPSuFR11BlR9YppQTVDbh5+16AmcJi4g1z4=
+github.com/atotto/clipboard v0.1.4/go.mod h1:ZY9tmq7sm5xIbd9bOK4onWV4S6X0u6GY7Vn0Yu86PYI=
+github.com/peterhellberg/giphy v0.0.0-20171214132724-091ba7d7516d h1:PXYebZOZ0f+EFlcOZd3JNpZfCox6kvZrilOxlQu6onc=
+github.com/peterhellberg/giphy v0.0.0-20171214132724-091ba7d7516d/go.mod h1:WHjFo9fv4TesGeW4b1+tJI5HrILT3+g9D5IdixoAOz8=

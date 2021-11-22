@@ -70,7 +70,7 @@ func main() {
 
 		fileSize, _ := strconv.Atoi(gif.Data.Images.Original.Size)
 		if fileSize < maxContentLength {
-			lgtmImageURL = lgtmURL + random.Data.ImageURL
+			lgtmImageURL = lgtmURL + gif.Data.Images.Original.URL
 			break
 		}
 	}
